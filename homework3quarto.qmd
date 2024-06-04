@@ -6,31 +6,24 @@ editor: visual
 
 ## Task 1: Conceptual Questions
 
-1.  If your working directory is myfolder/homework/, what relative path would you specify to get the file located at myfolder/MyData.csv? 
+1.  If your working directory is myfolder/homework/, what relative path would you specify to get the file located at myfolder/MyData.csv?
 
 > The relative path I would use is: "../MyData.csv"
 
-
 2.  What are the major benefits of using R projects?
-
 
 > The major benefits of using an R project is it is easy to organize your different projects. Each R project will have its own working directory, workspace, history, and folder structure / source documents. If you share your R project with someone, the paths are much more likely to work and they will have access to everything they need. You can also connect your R project to github very easily and track / update progress consistently.
 
-
 3.  What is git and what is github?
-
 
 > Git is a version control software, and Github is an online hosting service for Git-based projects.
 
-
 4.  What are the two main differences between a tibble and a data.frame?
 
+> The printing aspect of a tibble and a data.frame are different, the tibble output only shows the first few rows/columns. Also, tibbles do not coerce down to a vector when you subset to only one column.
 
-> The printing aspect of a tibble and a data.frame are different, the tibble output only shows the first few rows/columns. Also,  tibbles do not coerce down to a vector when you subset to only one column.
+5.  Rewrite the following nested function call using baseR’s chaining operator:
 
-
-5.  
-Rewrite the following nested function call using baseR’s chaining operator:
 ```{r}
 library(dplyr)
 arrange(filter(select(as_tibble(iris), starts_with("Petal"), Species), Petal.Length <
@@ -38,6 +31,7 @@ arrange(filter(select(as_tibble(iris), starts_with("Petal"), Species), Petal.Len
 ```
 
 Rewritten code:
+
 ```{r}
 iris |>
   as_tibble() |>
@@ -46,25 +40,25 @@ iris |>
   arrange(Species)
 ```
 
-
-
-6. What is meant by long format data and wide format data? Which do we generally prefer for statistical analysis?
-
+6.  What is meant by long format data and wide format data? Which do we generally prefer for statistical analysis?
 
 > Long format data is where each row consists of one observation and each column one variable. Wide format is when we may have more than one observation in a given row. Generally, for statistical analysis we prefer long-format data.
 
-
 ## Task 2: Reading Delimited Data
 
-### Glass Data  
-First, I will read in the data and add the appropriate column names. 
+### Glass Data
+
+First, I will read in the data and add the appropriate column names.
+
 ```{r}
 library(tidyverse)
 library(readr)
 glass <- read_csv("C:\\Users\\oferr\\Desktop\\558\\Homework3\\glass.data", 
                        col_names = c("Id", "RI", "Na", "Mg", "Al", "Si", "K", "Ca","Ba","Fe", "Type_of_Glass"), show_col_types = FALSE)
 ```
+
 Now I will start a chain and update the last variable while adding specifications to the data:
+
 ```{r}
 glass <- glass |>
   mutate(Type_of_Glass = 
@@ -81,14 +75,16 @@ glass
 ```
 
 ### Yeast Data
+
 ```{r}
 yeast <- read_fwf("C:\\Users\\oferr\\Desktop\\558\\Homework3\\yeast.data", 
-                       fwf_widths(c(10,6,6,6,6,6,6,6,6,4),
+                       fwf_widths(c(11,6,6,6,6,6,6,6,6,6),
                                   c("seq_name", "mcg", "gvh", "alm", 
                                     "mit", "erl", "pox", "vac","nuc","class")),show_col_types = FALSE)
 ```
 
 Now I will manipulate the data:
+
 ```{r}
 yeast <- yeast |>
   select(-c("seq_name","nuc")) |> # only selecting columns that are not seq_name, nuc
@@ -106,13 +102,16 @@ yeast
 ## Task 2: Combining Excel and Delimited Data
 
 Reading in excel data:
+
 ```{r}
 library(readxl)
 white_wine <- read_excel("white-wine.xlsx")
 # printing the data:
 white_wine
 ```
+
 Accessing the second sheet of variable names:
+
 ```{r}
 variables <- read_excel("white-wine.xlsx", sheet = "variables")
 colnames(white_wine) <- pull(variables)
@@ -121,6 +120,7 @@ white_wine$type <- "white"
 ```
 
 Accessing and reading in red wine data set:
+
 ```{r}
 red_wine <- read_delim("red-wine.csv", delim = ";",show_col_types = FALSE)
 colnames(red_wine) <- pull(variables)
@@ -129,6 +129,7 @@ red_wine$type <- "red"
 ```
 
 Combining the datasets:
+
 ```{r}
 combined_data <- dplyr::bind_rows(white_wine,red_wine)
 combined_data <- combined_data |>
@@ -139,10 +140,11 @@ combined_data <- combined_data |>
   mutate("mean_alcohol_by_quality" = mean(alcohol),
          "sd_alcohol_by_quality" = sd(alcohol))
 # adding mean and standard deviation columns
+combined_data
 ```
 
-
 ## Task 3: Database Practice
+
 ```{r}
 library(DBI)
 con <- dbConnect(RSQLite::SQLite(), "lahman.db") # creating the connection to the db
@@ -156,9 +158,11 @@ teams <- tbl(con, "Teams") |>
   filter(yearID == 2015) |>
   collect()
 # accessing the teams data set and filtering to where year is only 2015
+teams
 ```
 
 Repeating above using sql() function:
+
 ```{r}
 teams2 <- tbl(con, sql(
 "SELECT *
@@ -166,17 +170,21 @@ FROM `Teams`
 WHERE (`yearID` = 2015.0)")
 ) |>
 collect()
+teams2
 ```
 
 Now I will access the hall of fame data set and only include player, year, and category while also filtering to only include inducted individuals.
+
 ```{r}
 hall_of_fame <- tbl(con, "HallOfFame") |>
   filter(inducted == "Y") |>
   select(playerID, yearID, category)|>
   collect()
+hall_of_fame
 ```
 
 Now, I will combine this data set with the people one, to combine the names into the data set, through an inner join.
+
 ```{r}
 hall_of_fame_names <- inner_join(tbl(con, "People") |> 
                                    select(playerID, nameFirst, nameLast) |> 
@@ -184,9 +192,11 @@ hall_of_fame_names <- inner_join(tbl(con, "People") |>
                                  hall_of_fame, 
                                  by = join_by(playerID == playerID)) |> 
   collect()
+hall_of_fame_names
 ```
 
-Now I will access the managers data set, and summarize to get the total games managed, won, and lost. 
+Now I will access the managers data set, and summarize to get the total games managed, won, and lost.
+
 ```{r}
 managers <- tbl(con, "Managers") |> 
   select(playerID, G, W, L) |> 
@@ -199,8 +209,8 @@ managers <- tbl(con, "Managers") |>
   # creating the total win loss percentage
   arrange(desc(Total_W/G_managed)) 
   # sorting by descending percentage
+managers
 ```
-
 
 ```{r}
 final <- inner_join(managers,
@@ -210,4 +220,3 @@ final <- inner_join(managers,
 # printing the data set
 final
 ```
-
