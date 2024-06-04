@@ -7,27 +7,27 @@ editor: visual
 ## Task 1: Conceptual Questions
 
 1.  If your working directory is myfolder/homework/, what relative path would you specify to get the file located at myfolder/MyData.csv? 
-> 
+
 > The relative path I would use is: "../MyData.csv"
->
+
 
 2.  What are the major benefits of using R projects?
 
->
+
 > The major benefits of using an R project is it is easy to organize your different projects. Each R project will have its own working directory, workspace, history, and folder structure / source documents. If you share your R project with someone, the paths are much more likely to work and they will have access to everything they need. You can also connect your R project to github very easily and track / update progress consistently.
->
+
 
 3.  What is git and what is github?
 
->
+
 > Git is a version control software, and Github is an online hosting service for Git-based projects.
->
+
 
 4.  What are the two main differences between a tibble and a data.frame?
 
->
+
 > The printing aspect of a tibble and a data.frame are different, the tibble output only shows the first few rows/columns. Also,  tibbles do not coerce down to a vector when you subset to only one column.
->
+
 
 5.  
 Rewrite the following nested function call using baseR’s chaining operator:
@@ -50,9 +50,9 @@ iris |>
 
 6. What is meant by long format data and wide format data? Which do we generally prefer for statistical analysis?
 
->
+
 > Long format data is where each row consists of one observation and each column one variable. Wide format is when we may have more than one observation in a given row. Generally, for statistical analysis we prefer long-format data.
->
+
 
 ## Task 2: Reading Delimited Data
 
