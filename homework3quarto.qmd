@@ -6,10 +6,9 @@ editor: visual
 
 ## Task 1: Conceptual Questions
 
-1.  If your working directory is myfolder/homework/, what relative path would you specify to get the file
-    located at myfolder/MyData.csv?
->
-> "../MyData.csv"
+1.  If your working directory is myfolder/homework/, what relative path would you specify to get the file located at myfolder/MyData.csv? 
+> 
+> The relative path I would use is: "../MyData.csv"
 >
 
 2.  What are the major benefits of using R projects?
